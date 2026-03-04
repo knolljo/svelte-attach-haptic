@@ -27,7 +27,7 @@ arg "[increment]" default="patch" help="Version increment" {
   choices "patch" "minor" "major" "prepatch" "preminor" "premajor" "prerelease"
 }
 '''
-run = "bun pm version ${usage_increment}"
+run = "npm version ${usage_increment}"
 
 [tasks."release:build"]
 description = "Build the package for distribution"
