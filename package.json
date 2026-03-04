@@ -10,7 +10,10 @@
   ],
   "license": "MIT",
   "author": "",
-  "repository": "https://github.com/knolljo/svelte-attach-haptic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/knolljo/svelte-attach-haptic.git"
+  },
   "files": [
     "dist"
   ],
