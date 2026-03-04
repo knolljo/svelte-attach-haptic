@@ -37,8 +37,8 @@ run = "bun run build"
 [tasks."release:publish"]
 description = "Publish the package to npm"
 depends = ["release:build"]
-usage = 'flag "--otp <otp>" help="npm one-time password for 2FA"'
-run = "npm publish ${usage_otp:+--otp=${usage_otp}}"
+raw = true
+run = "npm publish"
 
 [tasks.release]
 description = "Full release: bump version → build → publish to npm"
