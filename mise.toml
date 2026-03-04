@@ -18,7 +18,7 @@ _.file = "./.env.local"
 
 [tasks.clean]
 description = "Clean project"
-run = ["rm -r node_modules dist playground/node_modules playground/build"]
+run = ["rm -rf node_modules dist playground/node_modules playground/build"]
 
 [tasks."release:version"]
 description = "Bump package version and create a git tag."
