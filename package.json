@@ -8,11 +8,15 @@
     "svelte",
     "svelte5"
   ],
+  "homepage": "https://github.com/joknoll/svelte-attach-haptic#readme",
+  "bugs": {
+    "url": "https://github.com/joknoll/svelte-attach-haptic/issues"
+  },
   "license": "MIT",
-  "author": "",
+  "author": "joknoll",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/knolljo/svelte-attach-haptic.git"
+    "url": "git+https://github.com/joknoll/svelte-attach-haptic.git"
   },
   "files": [
     "dist"
@@ -37,6 +41,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.0.3",
+    "bumpp": "^10.3.2",
     "jsdom": "^28.1.0",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",

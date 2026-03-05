@@ -1,8 +1,14 @@
 # svelte-attach-haptic
 
-Add haptics to Svelte 5 components using the [attachments API](https://svelte.dev/docs/svelte/attachments).
+A Svelte attachment for adding haptic feedback to elements using the [Svelte 5 attachments API](https://svelte.dev/docs/svelte/attachments).
 
-Uses the Web Vibration API. Silently no-ops on unsupported platforms (desktop). No error handling or feature detection needed.
+Uses the Web Vibration API. Silently no-ops on unsupported platforms (desktop).
+
+## Installation
+
+```
+npm install svelte-attach-haptic
+```
 
 ## Example
 
@@ -28,6 +34,8 @@ Uses the Web Vibration API. Silently no-ops on unsupported platforms (desktop). 
 <button {@attach tap({ pattern: "light" })}>Factory with override</button>
 ```
 
+[Demo](https://joknoll.github.io/svelte-attach-haptic/) | [npm](https://www.npmjs.com/package/svelte-attach-haptic)
+
 ## API
 
 ### `haptic(options?)`
@@ -35,14 +43,14 @@ Uses the Web Vibration API. Silently no-ops on unsupported platforms (desktop). 
 Svelte attachment that triggers haptic feedback on an element.
 
 | Option      | Type                           | Default     | Description                          |
-|--------     |------                          |---------    |-------------                         |
+|-------------|--------------------------------|-------------|--------------------------------------|
 | `pattern`   | `HapticInput`                  | `"medium"`  | Vibration pattern or preset name     |
 | `events`    | `[triggerEvent, cancelEvent?]` | `["click"]` | DOM events to trigger/cancel haptics |
 | `intensity` | `number`                       | `0.5`       | Global intensity override (0–1)      |
 
 ### `useHaptic(pattern?, events?, intensity?)`
 
-Factory function that returns a reusable attachment with preset defaults. The returned function accepts optional overrides per element:
+Factory function that returns a reusable attachment with preset defaults. The returned function accepts optional overrides per element.
 
 ```svelte
 <script lang="ts">
@@ -54,9 +62,9 @@ Factory function that returns a reusable attachment with preset defaults. The re
 <button {@attach tap({ pattern: "light" })}>Override pattern</button>
 ```
 
-### Haptic class
+### `Haptic` class
 
-For manual control:
+For manual control outside of attachments:
 
 ```ts
 import { Haptic } from "svelte-attach-haptic";
@@ -68,22 +76,12 @@ h.cancel();
 
 ### `isSupported`
 
-Boolean indicating whether the Web Vibration API is available:
-
-```svelte
-<script lang="ts">
-  import { isSupported } from "svelte-attach-haptic";
-</script>
-
-{#if isSupported}
-  <p>Haptics available</p>
-{/if}
-```
+Boolean indicating whether the Web Vibration API is available.
 
 ### Built-in presets
 
 | Preset        | Category     | Description                                              |
-|--------       |-----------   |-----------                                               |
+|---------------|--------------|----------------------------------------------------------|
 | `"light"`     | Impact       | Short, subtle tap (small toggle, minor interaction)      |
 | `"medium"`    | Impact       | Standard tap (button press, card snap-to-position)       |
 | `"heavy"`     | Impact       | Strong impact (major state change, force press)          |
@@ -114,17 +112,12 @@ haptic({ pattern: [
 
 ## Design Guidelines
 
-UX guidelines for haptic feedback:
-
-1. **Haptics supplement, never replace.** Always pair with visual feedback. UI must work fully without haptics.
-2. **Build causal relationships.** The haptic must feel like a direct physical consequence of the user action.
-3. **Match intensity to significance.** Light interactions = `"light"`/`"selection"`. Standard = `"medium"`/`"success"`. Major = `"heavy"`/`"error"`/`"warning"`.
-4. **Do not overuse.** If every tap vibrates, nothing feels special. Reserve for meaningful moments only.
-5. **Synchronize perfectly.** Fire haptic at the exact instant the visual change occurs.
-6. **Respect conventions.** `"success"` = positive, `"error"` = negative, `"warning"` = cautionary, `"selection"` = discrete ticks only.
-7. **For async ops**, trigger when the result arrives, synced with the visual state change:
+1. **Haptics supplement, never replace.** Always pair with visual feedback.
+2. **Match intensity to significance.** Light interactions → `"light"`/`"selection"`. Standard → `"medium"`/`"success"`. Major → `"heavy"`/`"error"`/`"warning"`.
+3. **Do not overuse.** Reserve for meaningful moments.
+4. **Synchronize perfectly.** Fire haptic at the exact instant the visual change occurs.
+5. **For async ops**, trigger when the result arrives:
    ```ts
-   import { Haptic } from "svelte-attach-haptic";
    try {
      await submit();
      new Haptic("success").trigger();
@@ -132,36 +125,3 @@ UX guidelines for haptic feedback:
      new Haptic("error").trigger();
    }
    ```
-
-### Quick reference
-
-| Interaction                | Preset        |
-|----------------------------|---------------|
-| Primary button tap         | `"medium"`    |
-| Secondary button           | `"light"`     |
-| Form success               | `"success"`   |
-| Validation / network error | `"error"`     |
-| Toggle switch              | `"light"`     |
-| Delete before confirm      | `"warning"`   |
-| Picker / wheel             | `"selection"` |
-| Slider detents             | `"selection"` |
-| Tab switch                 | `"selection"` |
-| Drag-drop snap             | `"medium"`    |
-| Long press                 | `"heavy"`     |
-| Modal appear               | `"medium"`    |
-| Pull-to-refresh threshold  | `"light"`     |
-| Swipe dismiss threshold    | `"light"`     |
-| Payment confirmed          | `"success"`   |
-
-### Anti-patterns
-
-- Haptic on every tap (fatigue)
-- `"error"` for non-errors (breaks conventions)
-- Haptic without visual feedback (some devices cannot vibrate)
-- Haptic on page load or passive scroll (invasive)
-- `"heavy"` for minor interactions (jarring)
-- Long continuous vibrations (use brief transient pulses, not `"buzz"` for UI feedback)
-
----
-
-[Demo](https://knolljo.github.io/svelte-attach-haptic/) | [npm](https://www.npmjs.com/package/svelte-attach-haptic)
